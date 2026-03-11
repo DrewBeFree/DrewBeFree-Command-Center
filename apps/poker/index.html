@@ -4,7 +4,7 @@
      © 2025 Andrew Webb. All rights reserved.
      Unauthorized copying, distribution, or resale of this
      software, in whole or in part, is strictly prohibited.
-     Last Updated: March 10, 2025 · v19
+     Last Updated: March 10, 2025 · v20
      ============================================================ -->
 <html lang="en">
 <head>
@@ -384,10 +384,9 @@
   .player-list { display: flex; flex-direction: column; gap: 8px; }
 
   .player-row {
-    display: grid;
-    grid-template-columns: 1fr auto auto auto;
+    display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     background: rgba(0,0,0,0.3);
     border: 1px solid rgba(201,168,76,0.12);
     border-radius: 10px;
@@ -400,6 +399,11 @@
   .player-row.out {
     opacity: 0.45;
     border-color: rgba(192,57,43,0.2);
+  }
+
+  .player-info {
+    flex: 1;
+    min-width: 0;
   }
 
   .player-name {
@@ -1355,11 +1359,13 @@ function renderPlayers() {
     const rebuyLabel = rebuys > 0 ? `${rebuys} rebuy${rebuys > 1 ? 's' : ''}` : 'no rebuys';
     return `
     <div class="player-row ${!p.active ? 'out' : ''}">
-      <div class="player-name">${escHtml(p.name)} ${!p.active ? '<span style="font-size:0.7rem;color:var(--text-muted)">(out)</span>' : ''}</div>
-      <div>
-        <div class="player-buyin">$${total.toFixed(0)}</div>
-        ${cashouts > 0 ? `<div class="cashout-badge">💰 cashed $${cashouts.toFixed(0)}</div>` : ''}
-        <div class="chip-count">${rebuyLabel}</div>
+      <div class="player-info">
+        <div class="player-name">${escHtml(p.name)} ${!p.active ? '<span style="font-size:0.7rem;color:var(--text-muted)">(out)</span>' : ''}</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div class="player-buyin">$${total.toFixed(0)}</div>
+          ${cashouts > 0 ? `<div class="cashout-badge">💰 cashed $${cashouts.toFixed(0)}</div>` : ''}
+          <div class="chip-count">${rebuyLabel}</div>
+        </div>
       </div>
       <div class="player-actions">
         ${p.active ? `<button class="btn btn-outline btn-sm" onclick="openBuyinFor(${i},'rebuy')">+ Rebuy</button>` : ''}
@@ -1808,7 +1814,7 @@ updateBlinds();
   © 2025 Andrew Webb · All Rights Reserved
 </div>
 <div style="text-align:center;padding:0 20px 24px;font-size:0.65rem;color:rgba(138,110,42,0.35);letter-spacing:1px;background-color:#0f2218;">
-  Last Updated: March 10, 2025 · v19
+  Last Updated: March 10, 2025 · v20
 </div>
 
 </body>
