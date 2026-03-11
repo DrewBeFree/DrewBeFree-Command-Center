@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DrewBeFree // Apps</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0e;
+    --bg2: #080f14;
+    --panel: #0a1520;
+    --border: #0d2535;
+    --accent: #00d4ff;
+    --accent2: #00ff88;
+    --accent3: #ff6b35;
+    --dim: #1a3a4a;
+    --text: #c8e8f0;
+    --text-dim: #3a6070;
+    --text-mid: #6a9ab0;
+    --glow: rgba(0,212,255,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scan lines overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* Grid background */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 48px 0 36px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .logo-block {}
+
+  .logo-eyebrow {
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+  }
+
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.8rem);
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 2px;
+    line-height: 1;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+
+  .logo span {
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(0,212,255,0.6);
+  }
+
+  .logo-sub {
+    font-size: 0.75rem;
+    color: var(--text-mid);
+    letter-spacing: 3px;
+    margin-top: 8px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.3s forwards;
+  }
+
+  .status-block {
+    text-align: right;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.4s forwards;
+  }
+
+  .status-line {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    line-height: 2;
+  }
+
+  .status-line .on { color: var(--accent2); }
+  .status-line .warn { color: var(--accent3); }
+
+  /* blinking cursor */
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--accent);
+    margin-left: 3px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.5s forwards;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── APP GRID ── */
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .app-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    opacity: 0;
+  }
+
+  .app-card:nth-child(1) { animation: fadeUp 0.5s ease 0.6s forwards; }
+  .app-card:nth-child(2) { animation: fadeUp 0.5s ease 0.75s forwards; }
+  .app-card:nth-child(3) { animation: fadeUp 0.5s ease 0.9s forwards; }
+  .app-card:nth-child(4) { animation: fadeUp 0.5s ease 1.05s forwards; }
+
+  .app-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .app-card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 20px var(--card-glow, var(--glow));
+  }
+  .app-card:hover::before { opacity: 1; }
+
+  /* Hover scan effect */
+  .app-card::after {
+    content: '';
+    position: absolute;
+    top: -100%; left: 0; right: 0;
+    height: 40%;
+    background: linear-gradient(180deg, transparent, rgba(0,212,255,0.03), transparent);
+    transition: top 0.5s ease;
+    pointer-events: none;
+  }
+  .app-card:hover::after { top: 150%; }
+
+  .card-id {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+    filter: drop-shadow(0 0 8px var(--card-accent, var(--accent)));
+  }
+
+  .card-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 18px;
+    font-weight: 300;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .tag {
+    font-size: 0.62rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--card-accent, var(--accent));
+    color: var(--card-accent, var(--accent));
+    border-radius: 2px;
+    opacity: 0.6;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-version {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  .card-launch {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--card-accent, var(--accent));
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s;
+  }
+  .app-card:hover .card-launch { gap: 10px; }
+
+  /* Coming soon card */
+  .app-card.coming-soon {
+    opacity: 0;
+    cursor: default;
+    animation: fadeUp 0.5s ease 0.9s forwards;
+  }
+  .app-card.coming-soon:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border);
+  }
+  .app-card.coming-soon::before { display: none; }
+
+  .coming-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── TERMINAL FOOTER ── */
+  .terminal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    line-height: 2;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 1.1s forwards;
+  }
+
+  .terminal-line::before {
+    content: '> ';
+    color: var(--accent2);
+  }
+
+  .terminal-line.out::before {
+    content: '  ';
+  }
+
+  .terminal-line .hi { color: var(--accent); }
+  .terminal-line .ok { color: var(--accent2); }
+  .terminal-line .mut { color: var(--text-dim); }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 1.2s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 32px 0 24px; }
+    .status-block { display: none; }
+    .app-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="header-top">
+      <div class="logo-block">
+        <div class="logo-eyebrow">// SYSTEM ONLINE</div>
+        <div class="logo">DREW<span>BE</span>FREE</div>
+        <div class="logo-sub">APP LAUNCHPAD · DREWBEFREE.GITHUB.IO<span class="cursor"></span></div>
+      </div>
+      <div class="status-block">
+        <div class="status-line">STATUS <span class="on">● ONLINE</span></div>
+        <div class="status-line">BUILD <span class="on">PASSING</span></div>
+        <div class="status-line">APPS <span class="on">1 LIVE</span></div>
+        <div class="status-line">UPTIME <span class="on">100%</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="section-label">// DEPLOYED APPS</div>
+
+  <div class="app-grid">
+
+    <!-- POKER NIGHT -->
+    <a class="app-card" href="./apps/poker/index.html"
+       style="--card-accent:#c9a84c; --card-glow: rgba(201,168,76,0.12);">
+      <div class="card-id">APP_001 // UTILITY</div>
+      <span class="card-icon">🃏</span>
+      <div class="card-name">POKER NIGHT</div>
+      <div class="card-desc">Full session manager for No-Limit Hold'em cash games. Timer, blinds, buy-ins, rebuys, mid-game cashouts, and end-of-night payout balancer.</div>
+      <div class="card-tags">
+        <span class="tag">Timer</span>
+        <span class="tag">Finance</span>
+        <span class="tag">Mobile Ready</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-version">v19 · 2026-03-10</span>
+        <span class="card-launch">LAUNCH ›</span>
+      </div>
+    </a>
+
+    <!-- COMING SOON SLOT -->
+    <div class="app-card coming-soon"
+         style="--card-accent:#00ff88; --card-glow: rgba(0,255,136,0.08);">
+      <div class="card-id">APP_002 // TBD</div>
+      <span class="card-icon" style="opacity:0.3;">⚙️</span>
+      <div class="card-name" style="opacity:0.3;">NEXT APP</div>
+      <div class="card-desc" style="opacity:0.3;">Something's brewing. Check back soon.</div>
+      <div class="coming-label">// COMING SOON</div>
+    </div>
+
+  </div>
+
+  <div class="terminal">
+    <div class="terminal-line">init DrewBeFree.github.io <span class="ok">✓ loaded</span></div>
+    <div class="terminal-line">scan ./apps <span class="hi">1 app found</span></div>
+    <div class="terminal-line out mut">last deploy: 2026-03-10 23:43 UTC</div>
+    <div class="terminal-line out mut">© 2026 Andrew Webb · All Rights Reserved</div>
+  </div>
+
+  <footer>
+    <span>© 2026 ANDREW WEBB</span>
+    <span>DREWBEFREE.GITHUB.IO</span>
+    <span>ALL RIGHTS RESERVED</span>
+  </footer>
+
+</div>
+</body>
+</html>
