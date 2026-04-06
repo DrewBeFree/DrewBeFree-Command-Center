@@ -1,7 +1,7 @@
 # CLAUDE.md — drewbefree.github.io
 
 ## Project Overview
-Personal GitHub Pages site for Andrew Webb (Atlanta, GA). Serves as a command center / portfolio linking to business sites and hosting small utility apps.
+Personal GitHub Pages site for Andrew Webb (Atlanta, GA). Serves as a command center / portfolio linking to business sites and apps.
 
 ## Owner
 Andrew Webb · drewbefree.github.io
@@ -10,13 +10,8 @@ Andrew Webb · drewbefree.github.io
 ```
 /
 ├── index.html          # Main command center / landing page
-├── CLAUDE.md           # This file
-└── apps/
-    └── poker/
-        └── index.html  # Poker Night app (poker-timer.html in dev)
+└── CLAUDE.md           # This file
 ```
-
-> Note: The poker app lives at `apps/poker/index.html` in the repo. The working/dev filename used during editing sessions has been `poker-timer.html`.
 
 ## Tech Stack
 - **Pure HTML/CSS/JS** — no build tools, no frameworks, no npm
@@ -36,14 +31,9 @@ Andrew Webb · drewbefree.github.io
 | Surf the Webb | https://surfthewebb.com |
 | DW Solutions | https://dwebbsolutions.com |
 
-## Apps
-### Poker Night (`apps/poker/index.html`)
-- No-Limit Hold'em cash game session manager
-- Features: session timer, round tracking, buy-ins/rebuys, mid-game cashouts, end-of-night payout calculator
-- Mobile responsive
-- Has a `beforeunload` guard to warn before navigating away from an active session
-- CSV export and print/PDF view built in
-- Chip legend: White $0.50 · Red $1.00 · Blue $5.00 · Green $10.00
+## Apps (separate repos)
+- **Poker Night** — https://github.com/DrewBeFree/poker · poker.drewbefree.com
+- **Linksy** — https://github.com/DrewBeFree/golf · linksy.drewbefree.com
 
 ## Design Conventions
 ### index.html (Command Center)
@@ -52,12 +42,6 @@ Andrew Webb · drewbefree.github.io
 - Card accent colors set via inline `--card-accent` and `--card-glow` CSS vars
 - Staggered fade-up entrance animations via `opacity:0` + named `@keyframes fadeUp`
 - New site cards go in `.site-grid`; new app cards go in `.app-grid`
-
-### Poker Night
-- Casino/felt aesthetic — deep greens, gold, cream
-- CSS variables in `:root` — use these, don't hardcode colors
-- Fonts: Playfair Display (headings/display), Courier Prime (mono/body)
-- Mobile breakpoints at 750px and 480px
 
 ## Common Tasks
 - **Add a new app card**: Edit `index.html`, copy an existing `.card` block inside `.app-grid`, update the `card-id`, icon, name, URL, desc, tags, and `href`
